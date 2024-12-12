@@ -1,28 +1,25 @@
-# Use Python 3.8 as the base image
-FROM python:3.8-slim
+# Sử dụng hình ảnh Python chính thức
+FROM python:3.9-slim
 
-# Update and install necessary libraries
-RUN apt-get update && apt-get install -y ffmpeg libavcodec-extra
+# Đặt biến môi trường để tránh tạo file .pyc và đảm bảo log được in ra console
+ENV PYTHONDONTWRITEBYTECODE=1
+ENV PYTHONUNBUFFERED=1
 
-# Upgrade pip to the latest version
-RUN pip install --upgrade pip
+# Cài đặt các công cụ cần thiết
+RUN apt-get update && apt-get install -y ffmpeg && rm -rf /var/lib/apt/lists/*
 
-# Set the working directory
+# Tạo thư mục làm việc cho ứng dụng
 WORKDIR /app
 
-# Copy the requirements file and install dependencies
-COPY requirements.txt requirements.txt
+# Sao chép file requirements.txt và cài đặt các thư viện
+COPY requirements.txt /app/
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Copy the rest of the application code
-COPY . .
+# Sao chép mã nguồn vào container
+COPY . /app/
 
-# Expose port 3000 for the Flask app
+# Expose cổng 3000 (hoặc cổng được Railway chỉ định)
 EXPOSE 3000
 
-# Set environment variables to reduce TensorFlow resource usage
-ENV TF_NUM_INTEROP_THREADS=1
-ENV TF_NUM_INTRAOP_THREADS=1
-
-# Run the application
+# Lệnh để chạy ứng dụng Flask
 CMD ["python", "app/app.py"]
