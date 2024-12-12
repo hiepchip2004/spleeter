@@ -5,7 +5,7 @@ FROM python:3.9-slim
 RUN apt-get update && apt-get install -y ffmpeg
 
 # Thiết lập thư mục làm việc
-WORKDIR /app
+WORKDIR /
 
 # Copy file requirements.txt và cài đặt dependencies
 COPY requirements.txt requirements.txt
@@ -18,4 +18,4 @@ COPY . .
 EXPOSE 3000
 
 # Chạy ứng dụng
-CMD ["python", "app.py"]
+CMD ["python", "main.py"]
