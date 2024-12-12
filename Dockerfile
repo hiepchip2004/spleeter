@@ -4,6 +4,7 @@ FROM python:3.9-slim
 # Cập nhật hệ thống và cài đặt ffmpeg
 RUN apt-get update && apt-get install -y ffmpeg
 
+WORKDIR /app
 
 # Copy file requirements.txt và cài đặt dependencies
 COPY requirements.txt requirements.txt
