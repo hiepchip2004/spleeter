@@ -8,6 +8,9 @@ ENV PYTHONUNBUFFERED=1
 # Cài đặt công cụ cần thiết
 RUN apt-get update && apt-get install -y ffmpeg && rm -rf /var/lib/apt/lists/*
 
+# Nâng cấp pip
+RUN pip install --upgrade pip
+
 # Thiết lập thư mục làm việc
 WORKDIR /app
 
