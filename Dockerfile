@@ -17,4 +17,4 @@ COPY . .
 EXPOSE 3000
 
 # Chạy ứng dụng
-CMD ["python", "app.py"]
+CMD ["python", "app/app.py"]
