@@ -1,25 +1,27 @@
-# Sử dụng hình ảnh Python chính thức
+# Sử dụng Python phiên bản nhẹ
 FROM python:3.9-slim
 
-# Đặt biến môi trường để tránh tạo file .pyc và đảm bảo log được in ra console
+# Đặt biến môi trường để cải thiện logging và không tạo file .pyc
 ENV PYTHONDONTWRITEBYTECODE=1
 ENV PYTHONUNBUFFERED=1
 
-# Cài đặt các công cụ cần thiết
+# Cài đặt công cụ cần thiết
 RUN apt-get update && apt-get install -y ffmpeg && rm -rf /var/lib/apt/lists/*
 
-# Tạo thư mục làm việc cho ứng dụng
+# Thiết lập thư mục làm việc
 WORKDIR /app
 
-# Sao chép file requirements.txt và cài đặt các thư viện
+# Sao chép file requirements.txt vào container
 COPY requirements.txt /app/
+
+# Cài đặt các thư viện cần thiết
 RUN pip install --no-cache-dir -r requirements.txt
 
 # Sao chép mã nguồn vào container
-COPY . /app/
+COPY . /app
 
-# Expose cổng 3000 (hoặc cổng được Railway chỉ định)
+# Expose cổng 3000
 EXPOSE 3000
 
 # Lệnh để chạy ứng dụng Flask
-CMD ["python", "app/app.py"]
+CMD ["python", "app.py"]
