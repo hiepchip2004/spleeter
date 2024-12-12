@@ -1,6 +1,6 @@
 import os
 from spleeter.separator import Separator
-from flask import Flask, request, jsonify, send_from_directory
+from flask import Flask, request, jsonify, send_from_directory, url_for
 from werkzeug.utils import secure_filename
 
 UPLOAD_FOLDER = 'upload'
@@ -21,7 +21,7 @@ os.makedirs(OUTPUT_FOLDER, exist_ok=True)
 def allowed_file(filename):
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
-@app.route('/', methods=['POST','GET'])
+@app.route('/', methods=['POST'])
 def upload_file():
     if 'file' not in request.files:
         return jsonify({'error': 'No file part'}), 400
@@ -40,10 +40,10 @@ def upload_file():
         separator = Separator('spleeter:2stems')
         separator.separate_to_file(input_path, output_dir)
 
-        # Trả về đường dẫn tới các file đã tách
+        # Trả về URL đầy đủ tới các file đã tách
         return jsonify({
-            'vocals': f'/outputs/{filename.rsplit(".", 1)[0]}/vocals.wav',
-            'accompaniment': f'/outputs/{filename.rsplit(".", 1)[0]}/accompaniment.wav'
+            'vocals': url_for('download_file', name=filename.rsplit('.', 1)[0], part='vocals.wav', _external=True),
+            'accompaniment': url_for('download_file', name=filename.rsplit('.', 1)[0], part='accompaniment.wav', _external=True)
         })
     else:
         return jsonify({'error': 'Invalid file format. Only mp3 and wav are allowed.'}), 400
