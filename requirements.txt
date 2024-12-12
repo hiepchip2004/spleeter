@@ -1,6 +1,5 @@
-Flask==2.0.2
-spleeter==2.3.2
-numpy>=1.21.0
-tensorflow>=2.6.0,<2.7.0
-llvmlite==0.37.0  # Yêu cầu bởi spleeter
-numba==0.54.0     # Yêu cầu bởi spleeter
+Flask
+werkzeug
+spleeter
+tensorflow==2.11.0  # (Phiên bản được Spleeter khuyên dùng)
+ffmpeg-python  # Đảm bảo ffmpeg được hỗ trợ
