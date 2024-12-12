@@ -1,27 +1,28 @@
-# Sử dụng Python 3.8 làm base image
+# Use Python 3.8 as the base image
 FROM python:3.8-slim
 
-# Cập nhật hệ thống và cài đặt ffmpeg, libavcodec-extra
+# Update and install necessary libraries
 RUN apt-get update && apt-get install -y ffmpeg libavcodec-extra
 
-# Nâng cấp pip
+# Upgrade pip to the latest version
 RUN pip install --upgrade pip
 
+# Set the working directory
 WORKDIR /app
 
-# Copy file requirements.txt và cài đặt dependencies
+# Copy the requirements file and install dependencies
 COPY requirements.txt requirements.txt
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Copy toàn bộ mã nguồn vào container
+# Copy the rest of the application code
 COPY . .
 
-# Thiết lập biến môi trường để giảm mức sử dụng tài nguyên
+# Expose port 3000 for the Flask app
+EXPOSE 3000
+
+# Set environment variables to reduce TensorFlow resource usage
 ENV TF_NUM_INTEROP_THREADS=1
 ENV TF_NUM_INTRAOP_THREADS=1
 
-# Mở cổng 3000 (dùng cho ứng dụng Flask)
-EXPOSE 3000
-
-# Chạy ứng dụng
+# Run the application
 CMD ["python", "app/app.py"]
